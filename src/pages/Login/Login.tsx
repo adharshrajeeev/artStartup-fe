@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { USER_LOGIN } from '../../utils/ConstUrls';
 import userInstance from '../../utils/axios';
+import { handleErrors } from '../../utils/toastify';
+import { LoadingButton } from '@mui/lab';
+import { navigateTo } from '../../utils/navigateTo';
 
 
 function Login() {
@@ -24,17 +27,16 @@ function Login() {
         try {
             setLoading(true);
             // Send a POST request to your authentication endpoint
-            const response = await userInstance.post(USER_LOGIN, formData);
+            const response: any = await userInstance.post(USER_LOGIN, formData);
 
             // Assuming successful login, you can handle the response here
             // For example, you can redirect the user to a dashboard or display a success message
-            if(response.data.success) {
-                navigate('/');
+            if(response.success) {
+                navigateTo('/');
+                console.log('Login successful', response);
             }
-            console.log('Login successful', response.data);
         } catch (error) {
-            // Handle login errors here, such as displaying an error message
-            console.error('Login failed', error);
+            handleErrors(error,"Login");
         } finally{
             setLoading(false);
         }
@@ -111,17 +113,19 @@ function Login() {
                                     Forgot password?
                                 </a>
                             </div>
-                            <button
+                            <LoadingButton
                                 type="button"
+                                loading={loading}
                                 disabled={!formData.email || !formData.password}
                                 onClick={(e)=>handleSubmit(e)}
+                                variant='contained'
                                 className={`w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 ${
                                     !formData.email || !formData.password ? 'bg-opacity-50 cursor-not-allowed' : ''
                                 }`}
 
                             >
                                 Sign in
-                            </button>
+                            </LoadingButton>
                             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                                 Don’t have an account yet?{" "}
                                 <Link to={"/signup"}>
