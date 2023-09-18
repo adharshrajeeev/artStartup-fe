@@ -14,6 +14,7 @@ const adminInstance = axios.create({
 });
 
 userInstance.interceptors.response.use((response) => {
+    console.log({response})
     return response.data;
 
 },

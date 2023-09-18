@@ -4,7 +4,7 @@ import { USER_LOGIN } from '../../utils/ConstUrls';
 import userInstance from '../../utils/axios';
 import { handleErrors } from '../../utils/toastify';
 import { LoadingButton } from '@mui/lab';
-import { navigateTo } from '../../utils/navigateTo';
+
 
 
 function Login() {
@@ -31,8 +31,10 @@ function Login() {
 
             // Assuming successful login, you can handle the response here
             // For example, you can redirect the user to a dashboard or display a success message
+            console.log("loginReponse",response)
             if(response.success) {
-                navigateTo('/');
+                localStorage.setItem("token",response.data)
+                navigate('/');
                 console.log('Login successful', response);
             }
         } catch (error) {

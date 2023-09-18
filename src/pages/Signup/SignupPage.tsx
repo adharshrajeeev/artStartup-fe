@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import userInstance from '../../utils/axios';
 import { SIGNUP } from '../../utils/ConstUrls';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { handleErrors } from '../../utils/toastify';
-import { navigateTo } from '../../utils/navigateTo';
+
 
 function SignupPage() {
     const [formData, setFormData] = useState({
@@ -12,6 +12,7 @@ function SignupPage() {
         password: '',
     });
     const [loading, setLoading] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -28,7 +29,7 @@ function SignupPage() {
             const response = await userInstance.post(SIGNUP, formData);
             console.log(response)
             if(response.status) {
-                navigateTo('/');
+                navigate('/');
             }
         } catch (error: any) {
             handleErrors(error, "signup");
